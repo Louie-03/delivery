@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+    <form method="post">
+        <div class="form-group">
+            <label for="score">평점</label>
+            <select name="score" id="score" class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="text">리뷰내용</label>
+            <input class="form-control" id="text" type="text" name="text" placeholder="리뷰를 입력해주세요.">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">검색</button>
+    </form>
+    <div th:replace="fragments/footer :: footer"></div>
+</div> <!-- /container -->
+</body>
+</html>

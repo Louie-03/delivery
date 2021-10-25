@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container" style="margin: 0px 100px; max-width: 900px">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="count">주문 수량</label>
+            <input type="text" class="form-control" placeholder="주문 수량을 입력하세요." id="count" name="count">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">submit</button>
+    </form>
+
+    <div th:replace="fragments/footer :: footer" />
+</div>
+</body>
+</html>

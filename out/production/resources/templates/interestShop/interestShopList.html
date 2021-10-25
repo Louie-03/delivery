@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <form class="form-inline">
+        <div class="form-group mx-sm-1 mb-2">
+            <select name="memberId" class="form-control">
+                <option value="">전체</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.id}"
+                        th:text="${member.name}"/>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">검색</button>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>회원명</th>
+            <th>가게명</th>
+            <th>평점</th>
+            <th>리뷰개수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="interestShopDto : ${interestShopDtos}">
+            <td th:text="${interestShopDto.memberName}"></td>
+            <td><a th:text="${interestShopDto.shopName}" th:href="@{/shops/{shopId}(shopId=${interestShopDto.shopId})}"></a></td>
+            <td th:text="${interestShopDto.reviewAvg}"></td>
+            <td th:text="${interestShopDto.reviewCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:replace="fragments/footer :: footer" />
+</div>
+</body>
+</html>

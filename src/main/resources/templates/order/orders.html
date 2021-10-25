@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"></div>
+    <div>
+        <div>
+            <form class="form-inline">
+                <div class="form-group mb-2">
+                    <select name="memberId" class="form-control">
+                        <option value="">전체</option>
+                        <option th:each="member : ${members}" th:text="${member.name}" th:value="${member.id}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>회원명</th> <th>가게명</th> <th colspan="2">주문가격</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.member.name}"></td>
+                <td th:text="${order.shop.name}"></td>
+                <td th:text="${order.totalPrice}"></td>
+                <td th:if="${order.review == null}">
+                    <a th:href="@{/reviews/new(orderId=${order.id})}">리뷰작성</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+</div> <!-- /container -->
+</body>
+</html>

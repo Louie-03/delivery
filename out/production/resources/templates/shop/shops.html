@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <ul class="nav nav-pills justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link" href="/categories">전체</a>
+        </li>
+        <li class="nav-item" th:each="shopCategory : ${shopCategories}">
+            <a th:href="@{/categories/{shopCategoryId}(shopCategoryId=${shopCategory.id})}"
+                    th:text="${shopCategory.name}" class="nav-link"> <!-- data-toggle="pill" -->
+            </a>
+        </li>
+
+        <button type="button" class="modal-btn btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+            <span class="fas fa-search" aria-hidden="true"></span>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 267px; margin-left: 810px; margin-top: 164px" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding: 0px">
+                        <form th:action>
+                            <div class="form-group form-inline" style="margin-bottom: 0px">
+                                <input type="text" class="form-control" name="searchName" style="border-radius: 0.25rem 0px 0px 0.25rem" placeholder="검색어를 입력해주세요.">
+                                <button class="btn btn-primary" type="submit" style="border-radius: 0px 0.25rem 0.25rem 0px">검색</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ul>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>가게명</th>
+            <th>평점</th>
+            <th>리뷰개수</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="shopCategoryDto : ${shopCategoryDtoList}">
+                <td><a th:href="@{/shops/{shopId}(shopId=${shopCategoryDto.shopId})}" th:text="${shopCategoryDto.shopName}"></a></td>
+                <td th:text="${shopCategoryDto.reviewAvg}"></td>
+                <td th:text="${shopCategoryDto.reviewCount}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:replace="fragments/footer :: footer" />
+</div>
+</body>
+<script>
+    $(document).ready(function (){
+        $("#exampleModal").modal({
+            backdrop : false,
+            show : false
+        })
+    })
+</script>
+</html>

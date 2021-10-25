@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container" style="margin: 0px 100px; max-width: 900px">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <span th:text="|${shopDto.shopName} ${shopDto.reviewAvg}|"></span>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs nav-justified">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/shops/{shopId}(shopId=${shopDto.shopId})}">메뉴</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/shops/{shopId}/reviews(shopId=${shopDto.shopId})}">리뷰 [[${shopDto.reviewCount}]]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">정보</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="accordion" id="accordionExample">
+
+                        <div class="card" th:each="itemCategoryDto, num : ${shopDto.itemCategoryDtoList}">
+                            <div class="card-header" th:id="'heading' + ${num.count}">
+                                <a href="#" class="btn btn-link" type="button" data-toggle="collapse" th:attr="data-target='#collapse' + ${num.count}, aria-controls='collapse' + ${num.count}" data-target="#collapse1"
+                                   aria-expanded="true" aria-controls="collapse1" th:text="${itemCategoryDto.itemCategoryName}">
+                                </a>
+                            </div>
+
+                            <div th:id="'collapse' + ${num.count}" id="collapse1" class="collapse" th:attr="aria-labelledby='heading' + ${num.count}" aria-labelledby="heading1" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div class="list-group">
+                                        <div th:if="${basket == null}">
+                                            <a href="#" th:each="itemDto : ${itemCategoryDto.itemDtoList}" class="list-group-item list-group-item-action" onclick="alert('회원을 선택해주세요.')">
+                                                <span th:text="${itemDto.name}"></span> <br>
+                                                <span th:text="${itemDto.price} + '원'"></span>
+                                            </a>
+                                        </div>
+
+                                        <div th:unless="${basket == null}">
+                                            <a th:href="@{/basketItems/new(shopId=${shopDto.shopId}, itemId=${itemDto.itemId}, memberId=${basket.member.id})}" th:each="itemDto : ${itemCategoryDto.itemDtoList}" class="list-group-item list-group-item-action">
+                                                <span th:text="${itemDto.name}"></span> <br>
+                                                <span th:text="${itemDto.price} + '원'"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <ul class="list-group mb-2">
+                <li class="list-group-item bg-black">주문표</li>
+                <div th:if="${basket == null}">
+                    <li class="list-group-item text-center" style="font-size: 0.85em; font-weight: 100">
+                        회원을 선택해주세요.
+                    </li>
+                    <li class="list-group-item">
+                        회원을 선택해주세요.
+                    </li>
+                </div>
+                <div th:unless="${basket == null}">
+                    <div th:if="${basket.basketItems.isEmpty()}">
+                        <li class="list-group-item text-center" style="font-size: 0.85em; font-weight: 100">
+                            주문표에 담긴 메뉴가 없습니다.
+                        </li>
+                        <li class="list-group-item">
+                            합계 : 0원
+                        </li>
+                    </div>
+                    <div th:unless="${basket.basketItems.isEmpty()}">
+                        <li class="list-group-item text-center" style="border: 0px; padding: 0px; font-size: 1rem; font-weight: 400">
+                            <table class="table table-striped" style="margin-bottom: 0px">
+                                <tbody>
+                                    <tr th:each="basketItem : ${basket.basketItems}">
+                                        <td th:text="${basketItem.item.name}"></td>
+                                        <td th:text="${basketItem.count} + '개'"></td>
+                                        <td th:text="${basketItem.basketPrice} + '원'"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li class="list-group-item" th:text="'합계 : ' + ${basket.totalPrice} + '원'">
+                        </li>
+                    </div>
+                </div>
+            </ul>
+
+            <div th:if="${basket == null}">
+                <a href="#" style="width: 100%;" type="button" class="btn btn-outline-primary mb-2" onclick="alert('회원을 선택해주세요.')">주문하기</a>
+            </div>
+            <div th:if="${basket != null and basket.basketItems.isEmpty()}">
+                <a href="#" style="width: 100%;" type="button" class="btn btn-outline-primary mb-2" onclick="alert('주문표에 담긴 메뉴가 없습니다.')">주문하기</a>
+            </div>
+            <div th:unless="${basket == null or basket.basketItems.isEmpty()}">
+                <form th:action="@{/orders/new(basketId=${basket.id})}" method="post">
+                    <input style="width: 100%;" type="submit" class="btn btn-outline-primary mb-2" value="주문하기"/>
+                </form>
+            </div>
+
+            <div class="dropdown">
+                <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    회원선택
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" th:each="member : ${members}" th:text="${member.name}"
+                       th:href="@{${#request.requestURI}(memberId=${member.id})}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div th:replace="fragments/footer :: footer" />
+</div>
+</body>
+</html>
