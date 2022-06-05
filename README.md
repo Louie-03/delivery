@@ -11,10 +11,3 @@
   * H2 데이터베이스
   * Spring MVC, Spring Data JPA, QueryDSL
   * HTML, Bootstrap4, Thymeleaf
-
-## Release Notes
-
------
-  * 0.0.1 
-    * 프로젝트 등록
-    * [첫번째 토이 프로젝트](https://backseok.tistory.com/2)
